@@ -1,2 +1,13 @@
 vi cors.json
+
+[
+    {
+      "origin": ["https://your-example-website.appspot.com"],
+      "method": ["GET"],
+      "responseHeader": ["Content-Type"],
+      "maxAgeSeconds": 3600
+    }
+]
+
+
 gcloud storage buckets update gs://artemis-documents-v1 --cors-file=cors.json
