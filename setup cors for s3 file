@@ -1,0 +1,2 @@
+vi cors.json
+gcloud storage buckets update gs://artemis-documents-v1 --cors-file=cors.json
