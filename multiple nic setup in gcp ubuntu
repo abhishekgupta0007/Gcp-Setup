@@ -1,0 +1,58 @@
+https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#routing-linux
+
+
+URL: https://cloud.google.com/vpc/docs/create-use-multiple-interfaces#routing-linux
+
+ 
+
+sudo ifconfig NIC IP_ADDRESS netmask NETMASK broadcast IP_ADDRESS mtu 1430
+
+echo "1 rt1" | sudo tee -a /etc/iproute2/rt_tables
+
+sudo ip route add GATEWAY src IP_ADDRESS dev NIC table rt1
+
+sudo ip route add default via GATEWAY dev NIC table rt1
+
+sudo ip rule add from IP_ADDRESS/PREFIX_LENGTH table rt1
+
+sudo ip rule add to IP_ADDRESS/PREFIX_LENGTH  table rt1
+
+ 
+
+ 
+
+Here, we need to take private IP address as well as Gateway IP. Also we need to change rt_table name for every NIC. Below are two exampls.
+
+ 
+
+sudo ifconfig ens4 35.223.250.171 netmask 255.255.255.255 broadcast 35.223.250.171 mtu 1430
+
+echo "1 rt1" | sudo tee -a /etc/iproute2/rt_tables
+
+sudo ip route add 10.10.0.1 src 35.223.250.171 dev ens4 table rt1
+
+sudo ip route add default via 10.10.0.1 dev ens4 table rt1
+
+sudo ip rule add from 35.223.250.171/32 table rt1
+
+sudo ip rule add to 35.223.250.171/32  table rt1
+
+ 
+
+ 
+
+sudo ifconfig ens5 104.198.240.59 netmask 255.255.255.255 broadcast 104.198.240.59 mtu 1430
+
+echo "2 rt2" | sudo tee -a /etc/iproute2/rt_tables
+
+sudo ip route add 10.20.0.1 src 104.198.240.59 dev ens5 table rt2
+
+sudo ip route add default via 10.20.0.1 dev ens5 table rt2
+
+sudo ip rule add from 104.198.240.59/32 table rt2
+
+sudo ip rule add to 104.198.240.59/32  table rt2
+
+ 
+
+and so on.
